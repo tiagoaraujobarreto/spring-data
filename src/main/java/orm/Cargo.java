@@ -1,4 +1,4 @@
-package br.com.alura.spring.data.orm;
+package orm;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
