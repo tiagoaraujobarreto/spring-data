@@ -6,17 +6,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import br.com.alura.spring.data.service.CrudCargoService;
+import br.com.alura.spring.data.service.CrudFuncionarioService;
 
 @SpringBootApplication
 public class SpringDataApplication implements CommandLineRunner {
 
-	private final CrudCargoService cargoService;
+	private final CrudFuncionarioService funcionarioService;
 
 	private Boolean system = true;
 
-	public SpringDataApplication(CrudCargoService cargoService) {
-		this.cargoService = cargoService;
+	public SpringDataApplication(CrudFuncionarioService funcionarioService) {
+		this.funcionarioService = funcionarioService;
 	}
 
 	public static void main(String[] args) {
@@ -33,9 +33,10 @@ public class SpringDataApplication implements CommandLineRunner {
 			System.out.println("1 - Salvar");
 
 			int action = scanner.nextInt();
-			
+
 			if (action == 1) {
-				cargoService.inicial(scanner);
+
+				funcionarioService.inicial(scanner);
 			} else {
 				system = false;
 			}
