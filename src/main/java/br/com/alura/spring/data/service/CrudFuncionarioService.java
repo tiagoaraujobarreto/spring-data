@@ -1,19 +1,32 @@
 package br.com.alura.spring.data.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.stereotype.Service;
 
+import br.com.alura.spring.data.orm.Cargo;
 import br.com.alura.spring.data.orm.Funcionario;
+import br.com.alura.spring.data.orm.UnidadeDeTrabalho;
+import br.com.alura.spring.data.repository.CargoRepository;
 import br.com.alura.spring.data.repository.FuncionarioRepository;
+import br.com.alura.spring.data.repository.UnidadeDeTrabalhoRepository;
 
 @Service
 public class CrudFuncionarioService {
 
 	private Boolean system = true;
+
+	private final CargoRepository cargoRepository;
+	private final UnidadeDeTrabalhoRepository unidadeDeTrabalhoRepository;
 	private final FuncionarioRepository funcionarioRepository;
 
-	public CrudFuncionarioService(FuncionarioRepository funcionarioRepository) {
+	public CrudFuncionarioService(CargoRepository cargoRepository,
+			UnidadeDeTrabalhoRepository unidadeDeTrabalhoRepository, FuncionarioRepository funcionarioRepository) {
+		this.cargoRepository = cargoRepository;
+		this.unidadeDeTrabalhoRepository = unidadeDeTrabalhoRepository;
 		this.funcionarioRepository = funcionarioRepository;
 	}
 
@@ -50,51 +63,87 @@ public class CrudFuncionarioService {
 
 	private void salvar(Scanner scanner) {
 		System.out.println("Nome do funcionario");
-		String fNome = scanner.next();
+		String nome = scanner.next();
+
 		System.out.println("Insira o CPF");
-		String fCpf = scanner.next();
+		String cpf = scanner.next();
+
 		System.out.println("Salário bruto");
-		Float fSalario = scanner.nextFloat();
+		Double salario = scanner.nextDouble();
+
+		System.out.println("Informe o ID do cargo");
+		Integer cargoID = scanner.nextInt();
+
+		List<UnidadeDeTrabalho> unidades = unidade(scanner);
 
 		Funcionario funcionario = new Funcionario();
-
-		funcionario.setNome(fNome);
-		funcionario.setCpf(fCpf);
-		funcionario.setSalario(fSalario);
+		funcionario.setNome(nome);
+		funcionario.setCpf(cpf);
+		funcionario.setSalario(salario);
+		funcionario.setCargoID(cargoID);
+		Optional<Cargo> cargo = cargoRepository.findById(cargoID);
+		funcionario.setCargo(cargo.get());
+		funcionario.setUnidadeDeTrabalhos(unidades);
 
 		funcionarioRepository.save(funcionario);
 		System.out.println("Salvo");
 	}
 
+	private List<UnidadeDeTrabalho> unidade(Scanner scanner) {
+		Boolean isTrue = true;
+		List<UnidadeDeTrabalho> unidades = new ArrayList<>();
+
+		while (isTrue) {
+			System.out.println("Insira o ID da unidade, 'Para sair digite 0'");
+			Integer unidadeId = scanner.nextInt();
+
+			if (unidadeId != 0) {
+				Optional<UnidadeDeTrabalho> unidade = unidadeDeTrabalhoRepository.findById(unidadeId);
+				unidades.add(unidade.get());
+			} else {
+				isTrue = false;
+			}
+		}
+		return unidades;
+	}
+
 	private void atualizar(Scanner scanner) {
 		System.out.println("Informe o id");
 		int id = scanner.nextInt();
+
 		System.out.println("Nome do funcionario");
-		String fNome = scanner.next();
+		String nome = scanner.next();
+
 		System.out.println("Insira o CPF");
-		String fCpf = scanner.next();
+		String cpf = scanner.next();
+
 		System.out.println("Salário bruto");
-		Float fSalario = scanner.nextFloat();
+		Double salario = scanner.nextDouble();
+
+		System.out.println("Salário bruto");
+		Integer cargoID = scanner.nextInt();
 
 		Funcionario funcionario = new Funcionario();
-
 		funcionario.setId(id);
-		funcionario.setNome(fNome);
-		funcionario.setCpf(fCpf);
-		funcionario.setSalario(fSalario);
-		funcionarioRepository.save(funcionario);
+		funcionario.setNome(nome);
+		funcionario.setCpf(cpf);
+		funcionario.setSalario(salario);
+		Optional<Cargo> cargo = cargoRepository.findById(cargoID);
+		funcionario.setCargo(cargo.get());
 
+		funcionarioRepository.save(funcionario);
 		System.out.println("Atualizado");
 	}
 
 	private void visualizar() {
-		Iterable<Funcionario> cargos = funcionarioRepository.findAll();
-		cargos.forEach(funcionario -> System.out.println(funcionario));
+		Iterable<Funcionario> funcionarios = funcionarioRepository.findAll();
+		funcionarios.forEach(funcionario -> System.out.println(funcionario));
 	}
 
 	private void deletar(Scanner scanner) {
 		System.out.println("Informe o id");
 		int id = scanner.nextInt();
+
 		funcionarioRepository.deleteById(id);
 		System.out.println("Registro deletado");
 	}

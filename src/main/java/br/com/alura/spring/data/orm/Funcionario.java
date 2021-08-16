@@ -1,12 +1,21 @@
 package br.com.alura.spring.data.orm;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "funcionarios")
@@ -17,8 +26,19 @@ public class Funcionario {
 	private Integer id;
 	private String nome;
 	private String cpf;
-	private Float salario;
+	private Double salario;
 	private LocalDate dataDeContratacao = LocalDate.now();
+	private Integer cargoID;
+
+	@ManyToOne
+	@JoinColumn(name = "cargo_id", nullable = false)
+	private Cargo cargo;
+
+	@Fetch(FetchMode.SELECT)
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "funcionarios_unidades", joinColumns = {
+			@JoinColumn(name = "fk_funcionario") }, inverseJoinColumns = { @JoinColumn(name = "fk_unidade") })
+	private List<UnidadeDeTrabalho> unidadeDeTrabalhos;
 
 	public Integer getId() {
 		return id;
@@ -44,11 +64,11 @@ public class Funcionario {
 		this.cpf = cpf;
 	}
 
-	public Float getSalario() {
+	public Double getSalario() {
 		return salario;
 	}
 
-	public void setSalario(Float salario) {
+	public void setSalario(Double salario) {
 		this.salario = salario;
 	}
 
@@ -58,6 +78,30 @@ public class Funcionario {
 
 	public void setDataDeContratacao(LocalDate dataDeContratacao) {
 		this.dataDeContratacao = dataDeContratacao;
+	}
+
+	public Cargo getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(Cargo cargo) {
+		this.cargo = cargo;
+	}
+
+	public Integer getCargoId() {
+		return cargoID;
+	}
+
+	public void setCargoID(Integer cargoID) {
+		this.cargoID = cargoID;
+	}
+
+	public List<UnidadeDeTrabalho> getUnidadeDeTrabalhos() {
+		return unidadeDeTrabalhos;
+	}
+
+	public void setUnidadeDeTrabalhos(List<UnidadeDeTrabalho> unidadeDeTrabalhos) {
+		this.unidadeDeTrabalhos = unidadeDeTrabalhos;
 	}
 
 	@Override

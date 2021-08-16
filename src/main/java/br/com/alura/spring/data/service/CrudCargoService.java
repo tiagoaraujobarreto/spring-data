@@ -51,8 +51,10 @@ public class CrudCargoService {
 	private void salvar(Scanner scanner) {
 		System.out.println("Descrição do cargo");
 		String descricao = scanner.next();
+
 		Cargo cargo = new Cargo();
 		cargo.setDescricao(descricao);
+
 		cargoRepository.save(cargo);
 		System.out.println("Salvo");
 	}
@@ -60,12 +62,14 @@ public class CrudCargoService {
 	private void atualizar(Scanner scanner) {
 		System.out.println("Informe o id");
 		int id = scanner.nextInt();
+
 		System.out.println("Informe a descrição do cargo");
 		String descricao = scanner.next();
 
 		Cargo cargo = new Cargo();
 		cargo.setId(id);
 		cargo.setDescricao(descricao);
+
 		cargoRepository.save(cargo);
 		System.out.println("Atualizado");
 	}
@@ -78,6 +82,7 @@ public class CrudCargoService {
 	private void deletar(Scanner scanner) {
 		System.out.println("Informe o id");
 		int id = scanner.nextInt();
+
 		cargoRepository.deleteById(id);
 		System.out.println("Registro deletado");
 	}
