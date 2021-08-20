@@ -55,7 +55,7 @@ public class SpringDataApplication implements CommandLineRunner {
 				CrudUnidadeDeTrabalhoService.inicial(scanner);
 				break;
 			default:
-				System.out.println("Finalizado");
+				System.out.println("Finalizado!");
 				system = false;
 			}
 		}
