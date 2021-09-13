@@ -80,7 +80,6 @@ public class CrudFuncionarioService {
 		funcionario.setNome(nome);
 		funcionario.setCpf(cpf);
 		funcionario.setSalario(salario);
-		funcionario.setCargoID(cargoID);
 		Optional<Cargo> cargo = cargoRepository.findById(cargoID);
 		funcionario.setCargo(cargo.get());
 		funcionario.setUnidadeDeTrabalhos(unidades);
@@ -108,7 +107,7 @@ public class CrudFuncionarioService {
 	}
 
 	private void atualizar(Scanner scanner) {
-		System.out.println("Informe o id");
+		System.out.println("Informe o id do funcionário");
 		int id = scanner.nextInt();
 
 		System.out.println("Nome do funcionario");
@@ -120,7 +119,7 @@ public class CrudFuncionarioService {
 		System.out.println("Salário bruto");
 		Double salario = scanner.nextDouble();
 
-		System.out.println("Salário bruto");
+		System.out.println("Insarira o ID do cargo");
 		Integer cargoID = scanner.nextInt();
 
 		Funcionario funcionario = new Funcionario();
